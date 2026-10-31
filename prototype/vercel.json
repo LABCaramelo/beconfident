@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "regions": ["gru1"],
+  "functions": {
+    "api/queue-consumer.mjs": {
+      "maxDuration": 60,
+      "experimentalTriggers": [{ "type": "queue/v2beta", "topic": "confident-whatsapp-inbound" }]
+    },
+    "api/*.mjs": { "maxDuration": 60 }
+  },
+  "rewrites": [
+    { "source": "/hooks/uazapi", "destination": "/api/webhook" }
+  ],
+  "headers": [{ "source": "/(.*)", "headers": [
+    { "key": "X-Content-Type-Options", "value": "nosniff" },
+    { "key": "Referrer-Policy", "value": "no-referrer" },
+    { "key": "X-Frame-Options", "value": "DENY" }
+  ] }]
+}

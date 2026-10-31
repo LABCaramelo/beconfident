@@ -1,0 +1,15 @@
+const fs=require('fs'),path=require('path'),crypto=require('crypto');
+const dir=path.join(__dirname,'evidence');
+const b=JSON.parse(fs.readFileSync(path.join(dir,'rea-checkout-bundle.json'),'utf8'));
+const e=b.records.find(x=>x.evidence_id==='ev_58bee261012e96c379c27c43c7f4bab1b94a63056d70402b5c0f5958a8060c46');
+const sanitize=s=>s.replace(/eyJ[A-Za-z0-9_-]*\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g,'[REDACTED-CHECKOUT-TOKEN]');
+fs.writeFileSync(path.join(dir,'checkout-capture.redacted.json'),sanitize(JSON.stringify(e)));
+const a=e.normalized_result.steps.at(-1).artifacts;
+const png=Buffer.from(a.screenshot.value.data_base64,'base64');
+fs.writeFileSync(path.join(dir,'checkout-mobile.png'),png);
+fs.writeFileSync(path.join(dir,'checkout-mobile.redacted.html'),sanitize(a.dom.value.text));
+fs.writeFileSync(path.join(dir,'checkout-accessibility.json'),JSON.stringify(a.accessibility.value,null,2));
+const es=e.normalized_result.events.items;
+const summary=es.filter(x=>x.kind==='request'||x.kind==='response').map(x=>{const u=new URL(x.url.url);return {event:x.kind,id:x.transaction_id,method:x.method,origin:u.origin,path:u.pathname,queryKeys:[...u.searchParams.keys()],status:x.status,resource:x.resource_type,header_names:x.header_names};});
+fs.writeFileSync(path.join(dir,'checkout-network-summary.json'),JSON.stringify(summary,null,2));
+console.log(JSON.stringify({screenshot:path.join(dir,'checkout-mobile.png'),bytes:png.length,hash:crypto.createHash('sha256').update(png).digest('hex'),domBytes:a.dom.value.bytes,providersInDOM:[...new Set(a.dom.value.text.match(/stripe|adyen|pagarme|pagar\.me|ebanx|mercadopago|mercado pago|next\.js|nuxt|recaptcha/gi)||[])],network:summary.filter(x=>!['image','font','stylesheet','script'].includes(x.resource))},null,2));

@@ -1,0 +1,14 @@
+const fs=require('fs');
+const path=require('path');
+const root=__dirname;
+const b=JSON.parse(fs.readFileSync(path.join(root,'evidence/rea-bundle.json'),'utf8'));
+const e=b.records.find(x=>x.operation==='capture_browser_scenario');
+fs.writeFileSync(path.join(root,'evidence/home-capture.json'),JSON.stringify(e));
+const n=e.normalized_result;
+const arts=n.steps.at(-1).artifacts;
+fs.writeFileSync(path.join(root,'evidence/home.html'),arts.dom.value.text);
+fs.writeFileSync(path.join(root,'evidence/home-accessibility.json'),JSON.stringify(arts.accessibility,null,2));
+const events=n.events.items;
+const urls=events.filter(x=>x.kind==='request').map(x=>({url:x.url.url,kind:x.resource_type,id:x.transaction_id}));
+fs.writeFileSync(path.join(root,'evidence/network-summary.json'),JSON.stringify({evidence_id:e.evidence_id,completeness:n.completeness,retained:n.events.retained,dropped:n.events.dropped,urls},null,2));
+console.log(JSON.stringify({evidence:e.evidence_id,artifactKeys:Object.keys(arts),events:events.length,urls:urls.filter(x=>!['image','font'].includes(x.kind)),a11y:arts.accessibility.value},null,2));

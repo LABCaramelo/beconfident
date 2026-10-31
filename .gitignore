@@ -1,0 +1,18 @@
+# Capturas brutas incluem identificadores de lead e tokens de checkout.
+research/evidence/
+research/fixtures/
+prototype/.data/
+node_modules/
+.env
+.env.*
+*.env
+*.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+*.log
+.vercel/
+.npm-cache/
+.DS_Store
+Thumbs.db

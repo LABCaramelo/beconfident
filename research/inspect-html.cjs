@@ -1,0 +1,13 @@
+const fs=require('fs'); const path=require('path'); const root=__dirname;
+const html=fs.readFileSync(path.join(root,'evidence/home.html'),'utf8');
+const scripts=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)].map((x,i)=>({index:i,attrs:x[1],body:x[2]}));
+const inline=scripts.filter(x=>x.body.trim());
+const out=path.join(root,'evidence/inline-scripts'); fs.mkdirSync(out,{recursive:true});
+for(const s of inline)fs.writeFileSync(path.join(out,`inline-${s.index}.js`),s.body);
+const links=[...html.matchAll(/href="([^"]*)"/g)].map(x=>x[1].replace(/&amp;/g,'&'));
+const fonts=[...new Set([...html.matchAll(/font-family:\s*([^;}]+)/g)].map(x=>x[1]))];
+const colors={};for(const x of html.matchAll(/(?:rgb\([^)]+\)|rgba\([^)]+\)|#[0-9a-fA-F]{3,8})/g))colors[x[0]]=(colors[x[0]]||0)+1;
+const names=[...new Set([...html.matchAll(/data-framer-name="([^"]*)"/g)].map(x=>x[1]))];
+const media=[...new Set([...html.matchAll(/@media[^{]*\{/g)].map(x=>x[0]))];
+const summary={scriptCount:scripts.length,inline:inline.map(x=>({index:x.index,attrs:x.attrs,bytes:Buffer.byteLength(x.body),preview:x.body.slice(0,170)})),fonts,colors:Object.entries(colors).sort((a,b)=>b[1]-a[1]).slice(0,35),media,names,links:[...new Set(links)].filter(x=>!x.startsWith('https://fonts')&&!x.startsWith('https://framerusercontent')&&!x.startsWith('https://connect.facebook'))};
+fs.writeFileSync(path.join(root,'evidence/html-summary.json'),JSON.stringify(summary,null,2));console.log(JSON.stringify(summary,null,2));

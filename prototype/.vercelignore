@@ -1,0 +1,11 @@
+.env*
+.data
+.npm-cache
+.vercel
+node_modules
+*.test.mjs
+preview-*.jpg
+server.mjs
+integrations/*check.mjs
+integrations/*webhook.mjs
+integrations/uazapi-bridge.mjs

@@ -1,0 +1,23 @@
+{
+  "name": "confident-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Corte vertical local e independente, baseado na investigação documentada.",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env.local server.mjs",
+    "test": "node --test --test-isolation=none engine.test.mjs integrations/uazapi.test.mjs integrations/whatsapp-flow.test.mjs integrations/generative-flow.test.mjs cloud/*.test.mjs",
+    "uazapi:check": "node --env-file=.env.local integrations/uazapi-check.mjs",
+    "openai:check": "node --env-file=.env.local integrations/openai-check.mjs",
+    "uazapi:webhook:plan": "node --env-file=.env.local integrations/uazapi-webhook.mjs"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "4.0.105",
+    "@vercel/blob": "2.8.2",
+    "@vercel/queue": "0.10.0",
+    "ai": "7.0.157"
+  }
+}

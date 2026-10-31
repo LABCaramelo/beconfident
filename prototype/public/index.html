@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Protótipo independente para praticar inglês, acompanhar atividades e revisar construções.">
+  <title>Confident Lab — prática de inglês</title>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Ir para o conteúdo</a>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Confident Lab, início"><img src="/icon.svg" alt="" width="40" height="40"><span>confident<span class="brand-lab">lab</span></span></a>
+    <p class="nav-label">SEU ESPAÇO DE PRÁTICA</p>
+    <nav id="navigation" aria-label="Navegação principal"></nav>
+    <div class="sidebar-bottom"><span class="status-dot"></span>Salvo nesta sessão<p>Protótipo independente. Sem vínculo com a BeConfident.</p></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><div class="demo-badge"><span></span>Protótipo <i>·</i> Tutor demonstrativo</div><button class="profile-button" id="profile-button" aria-label="Editar perfil"><span id="avatar">A</span><span id="profile-name">Seu perfil</span></button></header>
+    <main id="main" tabindex="-1"><div class="loading"><span class="spinner"></span>Preparando seu espaço…</div></main>
+    <footer class="app-footer">Este protótipo não avalia pronúncia nem certifica nível de inglês. IA generativa, análise de áudio e chamadas são recursos previstos. O canal WhatsApp funciona separadamente.</footer>
+  </div>
+  <dialog id="profile-dialog" aria-labelledby="profile-title">
+    <form id="profile-form">
+      <div class="dialog-brand"><img src="/icon.svg" alt="" width="44" height="44"><span>LET’S GET STARTED</span></div>
+      <h1 id="profile-title">A confiança começa<br>com o primeiro passo.</h1>
+      <p>Monte seu perfil e escolha um ritmo que caiba no seu dia.</p>
+      <label for="name">Como podemos chamar você?</label><input id="name" name="name" required maxlength="60" placeholder="Seu primeiro nome" autocomplete="given-name">
+      <label for="selfLevel">Como você se vê hoje?</label><select id="selfLevel" name="selfLevel"><option value="beginner">Estou começando</option><option value="intermediate">Já consigo conversar um pouco</option><option value="advanced">Quero ganhar repertório e fluidez</option></select>
+      <label for="dailyGoal">Qual é a sua meta diária?</label><select id="dailyGoal" name="dailyGoal"><option value="5">5 minutos · um primeiro passo</option><option value="10" selected>10 minutos · uma pausa produtiva</option><option value="15">15 minutos · um pouco além</option><option value="20">20 minutos · foco na prática</option></select>
+      <div class="dialog-actions"><button type="button" class="button quiet" id="profile-close">Voltar</button><button type="submit" class="button primary">Vamos começar <span>↗</span></button></div>
+      <small>Seu progresso é salvo no servidor desta demonstração. Não é preciso telefone ou cartão.</small>
+    </form>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
